@@ -2,10 +2,13 @@
 
 #include <map>
 #include "SystemModel.h"
+#include "Jobs.h"
 
 
 //Singleton class that runs the main simulation loop
 class Simulator {
+	long globalTime;
+
 	//Constructor is private to ensure only one instance
 	Simulator() {}
 
@@ -19,18 +22,12 @@ public:
 	Simulator(const Simulator&) = delete;
 	void operator=(const Simulator&) = delete;
 
+	SystemModel systemModel;
 	//TimeAxis timeAxis;
-	//SystemModel systemModel;
-	//Scheduler scheduler;
+	Scheduler scheduler;
 
 	void start();
 	void setup();
-};
-
-//A Job is an event on the TimeAxis
-class Job {
-	virtual void execute();
-	virtual bool isDispatchNecessary();
 };
 
 class TimeAxis {
@@ -44,13 +41,14 @@ class TimeAxis {
 };
 
 class Scheduler {
+public:
 	virtual void checkSystemModel();
-	virtual void dispatch();
+	virtual void dispatch(long time);
 	//Name and description?
 	virtual void initialize();
 	virtual void releaseResource();
 	virtual void requestResource();
-	virtual void stateChangeRequest();
+	virtual void stateChangeRequest(Task task, State state, long time);
 };
 
 //Class used to store info on current Task such as state and execution time. Generates events.
