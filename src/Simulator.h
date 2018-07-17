@@ -20,6 +20,8 @@ public:
 };
 
 class TimeAxis {
+	std::map<Job, long> axis; //Mapping from Jobs to times
+
 	void addJob();
 	void removeJob();
 	bool executeJobs();
@@ -44,12 +46,27 @@ class Scheduler {
 	virtual void stateChangeRequest();
 };
 
+
+//Singleton class used to map Tasks with their TaskMonitors
 class TaskManager {
 	std::map<Task, TaskMonitor> map;
 
-	TaskMonitor getMonitorForTask(Task);
+	TaskManager() {} //Constructor is private to ensure this is a singleton
+
+public:
+	//Method to get only instance of the TaskManager
+	static TaskManager& getInstance() {
+		static TaskManager INSTANCE;
+		return INSTANCE;
+	}
+	//Delete copy constructors to ensure no more instances of this class can be created
+	TaskManager(const TaskManager&) = delete;
+	void operator=(const TaskManager&) = delete;
+
+	TaskMonitor getMonitorForTask(Task); //Returns TaskMonitor for a given Task, creates it if it does not already exist
 };
 
+//Class used to 
 class TaskMonitor {
 	State state;
 	long elapsedExecutionTime;
@@ -65,4 +82,4 @@ class TaskMonitor {
 	//void block();
 	void terminate();
 	void remove();
-};
+};	
