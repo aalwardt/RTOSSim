@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <list>
 #include "SystemModel.h"
 #include "Jobs.h"
 
@@ -8,9 +9,8 @@
 //Singleton class that runs the main simulation loop
 class Simulator {
 	long globalTime;
-
 	//Constructor is private to ensure only one instance
-	Simulator() {}
+	Simulator() : globalTime(0) {}
 
 public:
 	//Method to get only instance of the TaskManager
@@ -23,7 +23,7 @@ public:
 	void operator=(const Simulator&) = delete;
 
 	SystemModel systemModel;
-	//TimeAxis timeAxis;
+	TimeAxis timeAxis;
 	Scheduler scheduler;
 
 	void start();
@@ -31,11 +31,11 @@ public:
 };
 
 class TimeAxis {
-	std::map<Job, long> axis; //Mapping from Jobs to times
+	std::map<long, std::list<Job>> axis; //Mapping from Jobs to times
 
-	void addJob();
-	void removeJob();
-	bool executeJobs();
+	void addJob(Job job, long time);
+	void removeJob(Job job, long time);
+	bool executeJobs(long time);
 
 	long getNextTimeStep();
 };
@@ -56,22 +56,30 @@ class TaskMonitor {
 	State state;
 	long elapsedExecutionTime;
 
-	void create();
-	void makeReady();
+	void create(Task&);
+	void makeReady(Task&);
 	//If CREATED:	Just change to READY
 	//If RUNNING:	Update elapsedExecutionTIme
 	//				Remove any terminateJobEvents from TimeAxis
 	//				Change to READY state
-	void run();
+	void run(Task&);
 	//Set to blocked
 	//void block();
-	void terminate();
-	void remove();
+	void terminate(Task&);
+	void remove(Task&);
+
+public:
+
+	TaskMonitor() :
+		state(State::NON_EXISTING),
+		elapsedExecutionTime(0)
+	{}
+
 };
 
 //Singleton class used to map Tasks with their TaskMonitors
 class TaskManager {
-	std::map<Task, TaskMonitor> map;
+	std::map<Task&, TaskMonitor> map;
 
 	TaskManager() {} //Constructor is private to ensure this is a singleton
 
@@ -85,6 +93,7 @@ public:
 	TaskManager(const TaskManager&) = delete;
 	void operator=(const TaskManager&) = delete;
 
-	TaskMonitor& getMonitorForTask(Task t); //Returns TaskMonitor for a given Task, creates it if it does not already exist
+	//Returns TaskMonitor for a given Task, creates it if it does not already exist
+	TaskMonitor& getMonitorForTask(Task& t) { return map[t]; }
 };
 

@@ -12,3 +12,23 @@ void Simulator::setup() {
 void Simulator::start() {
 
 }
+
+void TimeAxis::addJob(Job job, long time) {
+	axis[time].push_front(job);
+}
+
+void TimeAxis::removeJob(Job job, long time) {
+	axis[time].remove(job);
+}
+
+bool TimeAxis::executeJobs(long time) {
+	//Get list from axis[time], iterate through every job there and execute()
+	bool dispatchNecessary = false;
+	auto list = axis[time];
+	for (Job job : list) {
+		job.execute(time);
+		dispatchNecessary = dispatchNecessary || job.isDispatchNecessary(); 
+	}
+	
+	return dispatchNecessary;
+}
