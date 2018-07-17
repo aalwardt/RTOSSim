@@ -4,19 +4,33 @@
 #include "SystemModel.h"
 
 
-//Not sure this class is necessary?
+//Singleton class that runs the main simulation loop
 class Simulator {
-	TimeAxis timeAxis;
-	SystemModel systemModel;
-	Scheduler scheduler;
-
-	long duration;
+	//Constructor is private to ensure only one instance
+	Simulator() {}
 
 public:
-	Simulator(SystemModel sm, Scheduler s, long duration) : systemModel(sm), scheduler(s), duration(duration) {};
+	//Method to get only instance of the TaskManager
+	static Simulator& getInstance() {
+		static Simulator INSTANCE;
+		return INSTANCE;
+	}
+	//Delete copy constructors to ensure no more instances of this class can be created
+	Simulator(const Simulator&) = delete;
+	void operator=(const Simulator&) = delete;
+
+	//TimeAxis timeAxis;
+	//SystemModel systemModel;
+	//Scheduler scheduler;
 
 	void start();
 	void setup();
+};
+
+//A Job is an event on the TimeAxis
+class Job {
+	virtual void execute();
+	virtual bool isDispatchNecessary();
 };
 
 class TimeAxis {
@@ -29,23 +43,33 @@ class TimeAxis {
 	long getNextTimeStep();
 };
 
-//A Job is an event on the TimeAxis
-class Job {
-	virtual void execute();
-	virtual bool isDispatchNecessary();
-};
-
 class Scheduler {
-
 	virtual void checkSystemModel();
 	virtual void dispatch();
-	//Name and string
+	//Name and description?
 	virtual void initialize();
 	virtual void releaseResource();
 	virtual void requestResource();
 	virtual void stateChangeRequest();
 };
 
+//Class used to store info on current Task such as state and execution time. Generates events.
+class TaskMonitor {
+	State state;
+	long elapsedExecutionTime;
+
+	void create();
+	void makeReady();
+	//If CREATED:	Just change to READY
+	//If RUNNING:	Update elapsedExecutionTIme
+	//				Remove any terminateJobEvents from TimeAxis
+	//				Change to READY state
+	void run();
+	//Set to blocked
+	//void block();
+	void terminate();
+	void remove();
+};
 
 //Singleton class used to map Tasks with their TaskMonitors
 class TaskManager {
@@ -63,23 +87,6 @@ public:
 	TaskManager(const TaskManager&) = delete;
 	void operator=(const TaskManager&) = delete;
 
-	TaskMonitor getMonitorForTask(Task); //Returns TaskMonitor for a given Task, creates it if it does not already exist
+	TaskMonitor& getMonitorForTask(Task t); //Returns TaskMonitor for a given Task, creates it if it does not already exist
 };
 
-//Class used to 
-class TaskMonitor {
-	State state;
-	long elapsedExecutionTime;
-
-	void create();
-	void makeReady();
-		//If CREATED:	Just change to READY
-		//If RUNNING:	Update elapsedExecutionTIme
-		//				Remove any terminateJobEvents from TimeAxis
-		//				Change to READY state
-	void run();
-	//Set to blocked
-	//void block();
-	void terminate();
-	void remove();
-};	
