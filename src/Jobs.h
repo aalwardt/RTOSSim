@@ -1,22 +1,23 @@
 //A Job is an event on the TimeAxis
 class Job {
-public:
-	virtual void execute(long time);
-	virtual bool isDispatchNecessary();
-};
-
-class TaskCreateJob : Job {
+protected:
 	Task& task;
 public:
-	TaskCreateJob(Task& task) : task(task) {}
+	Job(Task& t) : task(t) {}
+	virtual void execute(long time) = 0;
+	virtual bool isDispatchNecessary() = 0;
+};
+
+class TaskCreateJob : public Job {
+public:
+	TaskCreateJob(Task& t) : Job(t) {}
 	void execute(long time);
 	bool isDispatchNecessary() { return true; }
 };
 
-class TaskTerminateJob : Job {
-	Task& task;
+class TaskTerminateJob : public Job {
 public:
-	TaskTerminateJob(Task& task) : task(task) {}
+	TaskTerminateJob(Task& t) : Job(t) {}
 	void execute(long time);
 	bool isDispatchNecessary() { return true; }
 };
