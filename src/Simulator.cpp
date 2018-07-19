@@ -2,6 +2,7 @@
 
 void Simulator::setup() {
 	//Initialize Scheduler
+	scheduler->initialize();
 	//Release first job of every task
 	for (Task& t : systemModel.taskList) {
 		Job * newJob = new TaskCreateJob(t);
@@ -10,7 +11,7 @@ void Simulator::setup() {
 }
 
 //Run the main simulation loop
-void Simulator::start() {
+void Simulator::run() {
 	setup();
 	
 }

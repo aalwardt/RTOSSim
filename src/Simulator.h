@@ -3,6 +3,7 @@
 #include <map>
 #include <list>
 #include "SystemModel.h"
+#include "Scheduler.h"
 #include "Jobs.h"
 
 
@@ -24,9 +25,9 @@ public:
 
 	SystemModel systemModel;
 	TimeAxis timeAxis;
-	Scheduler scheduler;
+	Scheduler* scheduler;
 
-	void start();
+	void run();
 	void setup();
 };
 
@@ -41,21 +42,18 @@ public:
 	long getNextTimeStep();
 };
 
-class Scheduler {
-public:
-	virtual void checkSystemModel();
-	virtual void dispatch(long time);
-	//Name and description?
-	virtual void initialize();
-	virtual void releaseResource();
-	virtual void requestResource();
-	virtual void stateChangeRequest(Task task, State state, long time);
-};
-
 //Class used to store info on current Task such as state and execution time. Generates events.
 class TaskMonitor {
 	State state;
 	long elapsedExecutionTime;
+public:
+
+	TaskMonitor() :
+		state(NON_EXISTING),
+		elapsedExecutionTime(0)
+	{}
+
+	State getState() { return state; }
 
 	void create(Task&);
 	void makeReady(Task&);
@@ -68,14 +66,6 @@ class TaskMonitor {
 	//void block();
 	void terminate(Task&);
 	void remove(Task&);
-
-public:
-
-	TaskMonitor() :
-		state(State::NON_EXISTING),
-		elapsedExecutionTime(0)
-	{}
-
 };
 
 //Singleton class used to map Tasks with their TaskMonitors
@@ -96,5 +86,15 @@ public:
 
 	//Returns TaskMonitor for a given Task, creates it if it does not already exist
 	TaskMonitor& getMonitorForTask(Task& t) { return map[t]; }
+
+	//Returns a list of tasks which are in the ready state
+	std::list<Task> getReadyTasks() {
+		std::list<Task> taskList;
+		for (auto pair : map)
+			if (pair.second.getState() == READY)
+				taskList.push_back(pair.first);
+
+		return taskList;
+	}
 };
 
