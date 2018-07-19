@@ -39,33 +39,37 @@ public:
 	void removeJob(Job* job, long time);
 	bool executeJobs(long time);
 
-	long getNextTimeStep();
+	long getNextTimeStep(long time);
 };
 
 //Class used to store info on current Task such as state and execution time. Generates events.
 class TaskMonitor {
 	State state;
+	long absoluteDeadline;
+	long executionStartTime;
 	long elapsedExecutionTime;
 public:
 
 	TaskMonitor() :
-		state(NON_EXISTING),
+		state(State::NON_EXISTING),
+		absoluteDeadline(0),
+		executionStartTime(0),
 		elapsedExecutionTime(0)
 	{}
 
 	State getState() { return state; }
 
-	void create(Task&);
-	void makeReady(Task&);
+	void create(Task&, long time);
+	void makeReady(Task&, long time);
 	//If CREATED:	Just change to READY
 	//If RUNNING:	Update elapsedExecutionTIme
 	//				Remove any terminateJobEvents from TimeAxis
 	//				Change to READY state
-	void run(Task&);
+	void run(Task&, long time);
 	//Set to blocked
 	//void block();
-	void terminate(Task&);
-	void remove(Task&);
+	void terminate(Task&, long time);
+	void remove(Task&, long time);
 };
 
 //Singleton class used to map Tasks with their TaskMonitors
@@ -86,15 +90,5 @@ public:
 
 	//Returns TaskMonitor for a given Task, creates it if it does not already exist
 	TaskMonitor& getMonitorForTask(Task& t) { return map[t]; }
-
-	//Returns a list of tasks which are in the ready state
-	std::list<Task> getReadyTasks() {
-		std::list<Task> taskList;
-		for (auto pair : map)
-			if (pair.second.getState() == READY)
-				taskList.push_back(pair.first);
-
-		return taskList;
-	}
 };
 
