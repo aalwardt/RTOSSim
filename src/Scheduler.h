@@ -1,4 +1,7 @@
+#pragma once
+
 #include "SystemModel.h"
+#include "TaskManager.h"
 
 class Scheduler {
 public:
@@ -8,7 +11,7 @@ public:
 	//Name and description?
 	//virtual void releaseResource() = 0;
 	//virtual void requestResource() = 0;
-	virtual void stateChangeRequest(Task task, State state, long time) = 0;
+	virtual void stateChangeRequest(Task& task, State state, long time) = 0;
 };
 
 class BasicScheduler : public Scheduler {
@@ -41,7 +44,7 @@ public:
 		case READY:
 			if (monitor.getState() == CREATED)
 				monitor.makeReady(task, time);
-			else if (monitor.getState == RUNNING)
+			else if (monitor.getState() == RUNNING)
 				monitor.makeReady(task, time); //TODO: Logic for storing execution time
 			//Move it into the ready queue
 			readyQueue = &task;

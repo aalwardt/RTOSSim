@@ -1,3 +1,4 @@
+#pragma once
 
 #include <vector>
 
@@ -45,4 +46,3 @@ enum State {
 	BLOCKED,
 	TERMINATED
 };
-

@@ -1,3 +1,7 @@
+#pragma once
+
+#include "SystemModel.h"
+
 //A Job is an event on the TimeAxis
 class Job {
 protected:
