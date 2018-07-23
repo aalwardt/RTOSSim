@@ -1,5 +1,8 @@
 #pragma once
 
+#include "SystemModel.h"
+#include <map>
+
 //Class used to store info on current Task such as state and execution time. Generates events.
 class TaskMonitor {
 	State state;
@@ -17,17 +20,17 @@ public:
 
 	State getState() { return state; }
 
-	void create(Task&, long time);
-	void makeReady(Task&, long time);
+	void create(Task*, long time);
+	void makeReady(Task*, long time);
 	//If CREATED:	Just change to READY
 	//If RUNNING:	Update elapsedExecutionTIme
 	//				Remove any terminateJobEvents from TimeAxis
 	//				Change to READY state
-	void run(Task&, long time);
+	void run(Task*, long time);
 	//Set to blocked
 	//void block();
-	void terminate(Task&, long time);
-	void remove(Task&, long time);
+	void terminate(Task*, long time);
+	void remove(Task*, long time);
 };
 
 //Singleton class used to map Tasks with their TaskMonitors
@@ -47,5 +50,5 @@ public:
 	void operator=(const TaskManager&) = delete;
 
 	//Returns TaskMonitor for a given Task, creates it if it does not already exist
-	TaskMonitor& getMonitorForTask(Task& t) { return map[&t]; }
+	TaskMonitor& getMonitorForTask(Task* t) { return map[t]; }
 };

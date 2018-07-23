@@ -1,11 +1,10 @@
 #include "Simulator.h"
-#include <iostream>
 
 void Simulator::setup() {
 	//Initialize Scheduler
 	scheduler->initialize();
 	//Release first job of every task
-	for (Task& t : systemModel.taskList) {
+	for (Task* t : systemModel.taskList) {
 		Job * newJob = new TaskCreateJob(t);
 		timeAxis.addJob(newJob, globalTime);
 	}

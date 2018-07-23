@@ -32,7 +32,7 @@ struct Core {
 
 class SystemModel {
 public:
-	std::vector<Task> taskList;
+	std::vector<Task*> taskList;
 
 	//Default constructor
 	SystemModel() {}
