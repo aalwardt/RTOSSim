@@ -1,5 +1,6 @@
 #include "Scheduler.h"
 #include "TaskManager.h"
+#include <iostream>
 
 void BasicScheduler::initialize() {
 	//Do nothing
@@ -10,37 +11,40 @@ void BasicScheduler::dispatch(long time) {
 	stateChangeRequest(readyTask, State::RUNNING, time);
 }
 void BasicScheduler::stateChangeRequest(Task* task, State state, long time) {
+	std::cout << "State Change Request for task: " << task << std::endl;
 	//Get monitor for the task
-	TaskMonitor monitor = TaskManager::getInstance().getMonitorForTask(task);
+	TaskMonitor* monitor = TaskManager::getInstance().getMonitorForTask(task);
+	std::cout << "Monitor for task: " << &monitor << std::endl;
+
 
 	switch (state) {
 	case NON_EXISTING:
-		if (monitor.getState() == TERMINATED)
-			monitor.remove(task, time);
+		if (monitor->getState() == TERMINATED)
+			monitor->remove(task, time);
 		break;
 	case CREATED:
-		if (monitor.getState() == NON_EXISTING) {
-			monitor.create(task, time);
+		if (monitor->getState() == NON_EXISTING) {
+			monitor->create(task, time);
 			//Immediately make it ready
 			stateChangeRequest(task, State::READY, time);
 		}
 		break;
 	case READY:
-		if (monitor.getState() == CREATED)
-			monitor.makeReady(task, time);
-		else if (monitor.getState() == RUNNING)
-			monitor.makeReady(task, time); //TODO: Logic for storing execution time
+		if (monitor->getState() == CREATED)
+			monitor->makeReady(task, time);
+		else if (monitor->getState() == RUNNING)
+			monitor->makeReady(task, time); //TODO: Logic for storing execution time
 										   //Move it into the ready queue
 		readyQueue = task;
 		break;
 	case RUNNING:
-		if (monitor.getState() == READY)
-			monitor.run(task, time);
+		if (monitor->getState() == READY)
+			monitor->run(task, time);
 		break;
 		//case BLOCKED:
 	case TERMINATED:
-		if (monitor.getState() == RUNNING) {
-			monitor.terminate(task, time);
+		if (monitor->getState() == RUNNING) {
+			monitor->terminate(task, time);
 			stateChangeRequest(task, State::NON_EXISTING, time);
 		}
 		break;

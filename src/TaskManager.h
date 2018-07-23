@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SystemModel.h"
+#include <iostream>
 #include <map>
 
 //Class used to store info on current Task such as state and execution time. Generates events.
@@ -35,10 +36,9 @@ public:
 
 //Singleton class used to map Tasks with their TaskMonitors
 class TaskManager {
-	std::map<Task*, TaskMonitor> map;
+	std::map<Task*, TaskMonitor*> map;
 
 	TaskManager() {} //Constructor is private to ensure this is a singleton
-
 public:
 	//Method to get only instance of the TaskManager
 	static TaskManager& getInstance() {
@@ -50,5 +50,9 @@ public:
 	void operator=(const TaskManager&) = delete;
 
 	//Returns TaskMonitor for a given Task, creates it if it does not already exist
-	TaskMonitor& getMonitorForTask(Task* t) { return map[t]; }
+	TaskMonitor* getMonitorForTask(Task* t) {
+		if (map[t] == nullptr)
+			map[t] = new TaskMonitor;
+		return map[t];
+	}
 };

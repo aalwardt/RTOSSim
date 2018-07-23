@@ -1,4 +1,5 @@
 #include "Simulator.h"
+#include <iostream>
 
 void Simulator::setup() {
 	//Initialize Scheduler
@@ -56,10 +57,10 @@ bool TimeAxis::executeJobs(long time) {
 long TimeAxis::getNextTimeStep(long time) {
 	//Start iterator at element for current time
 	auto it = axis.find(time);
-	//If it's not the last element...
+	++it; //Increment iterator
 	if (it != axis.end()) {
-		++it;				  //Increment iterator
-		return (*it).first;	  //Return the key of the element (the next time)
+		//If it isn't the last element, return the new key (the next time)
+		return (*it).first;
 	}
 	else { 
 		//If it is the last element, return LONG_MAX
