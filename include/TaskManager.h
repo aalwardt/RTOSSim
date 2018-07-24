@@ -45,6 +45,8 @@ public:
 class TaskManager {
 	std::map<Task*, TaskMonitor*> map;
 
+
+
 	TaskManager() {} //Constructor is private to ensure this is a singleton
 public:
 	//Method to get only instance of the TaskManager

@@ -21,3 +21,10 @@ public:
 	void dispatch(long time);
 	void stateChangeRequest(Task* task, State state, long time);
 };
+
+#include <set>
+
+//TODO: Reorganize source directory so that each Scheduler can be defined it its own file, in its own directory
+class RMSScheduler : public Scheduler {
+
+};

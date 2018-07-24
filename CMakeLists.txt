@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.2.2)
 PROJECT(RTOSSim)
 
-file(GLOB MYSOURCES		"src/*.cpp")
+include_directories(include)
 
-ADD_EXECUTABLE(RTOSSim ${MYSOURCES} )
+file(GLOB SOURCES "src/*.cpp")
+
+ADD_EXECUTABLE(RTOSSim ${SOURCES})

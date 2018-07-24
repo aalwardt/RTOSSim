@@ -33,11 +33,16 @@ struct Task {
 	//TODO: Commands for tasks with multiple execution and resource acquisition block
 	//For now we will model this with just a single execution time
 
+	//Default constructor
 	Task() {}
 
 	//Ensure that Task objects are not copied. All task instances should be stored in the system model
 	Task(const Task&) = delete;
 	void operator=(const Task&) = delete;
+
+	//Comparison operation
+	//Tasks are ordered by their priority, with lower numbers being higher priority
+
 };
 
 struct Core {
