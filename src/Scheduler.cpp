@@ -17,36 +17,27 @@ void BasicScheduler::stateChangeRequest(Task* task, State state, long time) {
 	//std::cout << "Monitor for task: " << &monitor << std::endl;
 
 
+	//TODO: Move state transition enforcement into TaskMonitor
+	//Throw exceptions when it fails?
 	switch (state) {
 	case NON_EXISTING:
-		if (monitor->getState() == TERMINATED)
-			monitor->remove(task, time);
+		monitor->remove(task, time);
 		break;
 	case CREATED:
-		if (monitor->getState() == NON_EXISTING) {
-			monitor->create(task, time);
-			//Immediately make it ready
-			stateChangeRequest(task, READY, time);
-		}
+		monitor->create(task, time);
+		stateChangeRequest(task, READY, time);
 		break;
 	case READY:
-		if (monitor->getState() == CREATED)
-			monitor->makeReady(task, time);
-		else if (monitor->getState() == RUNNING)
-			monitor->makeReady(task, time); //TODO: Logic for storing execution time
-										   //Move it into the ready queue
-		readyQueue = task;
+		monitor->makeReady(task, time);
+		readyQueue = task; //Put our task into the ready queue (only one ready task in this dirty example)
 		break;
 	case RUNNING:
-		if (monitor->getState() == READY)
-			monitor->run(task, time);
+		monitor->run(task, time);
 		break;
 		//case BLOCKED:
 	case TERMINATED:
-		if (monitor->getState() == RUNNING) {
-			monitor->terminate(task, time);
-			stateChangeRequest(task, NON_EXISTING, time);
-		}
+		monitor->terminate(task, time);
+		stateChangeRequest(task, NON_EXISTING, time);
 		break;
 	}
 
