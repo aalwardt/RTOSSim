@@ -11,10 +11,10 @@ void BasicScheduler::dispatch(long time) {
 	stateChangeRequest(readyTask, State::RUNNING, time);
 }
 void BasicScheduler::stateChangeRequest(Task* task, State state, long time) {
-	std::cout << "State Change Request for task: " << task << std::endl;
+	//std::cout << "State Change Request for task: " << task << std::endl;
 	//Get monitor for the task
 	TaskMonitor* monitor = TaskManager::getInstance().getMonitorForTask(task);
-	std::cout << "Monitor for task: " << &monitor << std::endl;
+	//std::cout << "Monitor for task: " << &monitor << std::endl;
 
 
 	switch (state) {
@@ -26,7 +26,7 @@ void BasicScheduler::stateChangeRequest(Task* task, State state, long time) {
 		if (monitor->getState() == NON_EXISTING) {
 			monitor->create(task, time);
 			//Immediately make it ready
-			stateChangeRequest(task, State::READY, time);
+			stateChangeRequest(task, READY, time);
 		}
 		break;
 	case READY:
@@ -45,7 +45,7 @@ void BasicScheduler::stateChangeRequest(Task* task, State state, long time) {
 	case TERMINATED:
 		if (monitor->getState() == RUNNING) {
 			monitor->terminate(task, time);
-			stateChangeRequest(task, State::NON_EXISTING, time);
+			stateChangeRequest(task, NON_EXISTING, time);
 		}
 		break;
 	}

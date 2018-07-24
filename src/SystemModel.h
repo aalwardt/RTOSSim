@@ -2,12 +2,26 @@
 
 #include <vector>
 
+enum State {
+	NON_EXISTING,
+	CREATED,
+	READY,
+	RUNNING,
+	BLOCKED,
+	TERMINATED
+};
+
+enum Periodity {
+	PERIODIC,
+	SPORADIC
+};
+
 struct Task {
 	//Deadline Type: HARD or SOFT
 	int deadline;
 	int priority;
 	//int offset;
-	//Periodity: SPORADIC or PERIODIC
+	Periodity periodity;
 	int period;
 	//int jitter;
 	//int contextSwitchingTime;
@@ -38,11 +52,3 @@ public:
 	SystemModel() {}
 };
 
-enum State {
-	NON_EXISTING,
-	CREATED,
-	READY,
-	RUNNING,
-	BLOCKED,
-	TERMINATED
-};

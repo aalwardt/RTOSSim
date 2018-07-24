@@ -26,7 +26,7 @@ void Simulator::run() {
 		}
 
 		long nextTime = timeAxis.getNextTimeStep(globalTime);
-		if (nextTime = LONG_MAX) {
+		if (nextTime == LONG_MAX || nextTime > 100 /* Placeholder max duration */) {
 			running = false;
 		}
 
