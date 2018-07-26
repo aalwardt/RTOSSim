@@ -18,7 +18,7 @@ void RMSScheduler::dispatch(long time) {
 			readyQueue.pop();
 		}
 		//If element at top of queue is higher priority than running
-		else if (comp(readyQueue.top(), running)) {
+		else if (comp(running, readyQueue.top())) {
 			//Stop the current task from running
 			stateChangeRequest(running, READY, time);
 			//Pull the task from the top of the ready queue and make it run

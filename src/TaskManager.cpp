@@ -19,6 +19,7 @@ void TaskMonitor::create(Task* t, long time) {
 	}
 	else {
 		//TODO: Throw exception?
+		std::cerr << time << '\t' << t << "\tILLEGAL STATE CHANGE TO CREATED\n";
 	}
 }
 
@@ -38,6 +39,7 @@ void TaskMonitor::makeReady(Task* t, long time) {
 		break;
 	default:
 		//TODO: Throw exception?
+		std::cerr << time << '\t' << t << "\tILLEGAL STATE CHANGE TO READY\n";
 		break;
 	}
 }
@@ -56,6 +58,7 @@ void TaskMonitor::run(Task* t, long time) {
 		std::cout << time << '\t' << t << "\tTask running\n";
 	}
 	else {
+		std::cerr << time << '\t' << t << "\tILLEGAL STATE CHANGE TO RUNNING\n";
 		//TODO: Throw exception?
 	}
 }
@@ -67,6 +70,7 @@ void TaskMonitor::terminate(Task* t, long time) {
 		std::cout << time << '\t' << t << "\tTask terminated\n";
 	}
 	else {
+		std::cerr << time << '\t' << t << "\tILLEGAL STATE CHANGE TO TERMINATED\n";
 		//TODO: Throw exception?
 	}
 }
@@ -78,6 +82,7 @@ void TaskMonitor::remove(Task* t, long time) {
 		std::cout << time << '\t' << t << "\tTask removed\n";
 	}
 	else {
+		std::cerr << time << '\t' << t << "\tILLEGAL STATE CHANGE TO REMOVE\n";
 		//TODO: Throw exception?
 	}
 }
