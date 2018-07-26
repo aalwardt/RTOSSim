@@ -7,11 +7,11 @@
 #include "SystemModel.h"
 
 class TimeAxis {
-	std::map<long, std::list<Job*>> axis; //Mapping from Jobs to times
+	std::map<long, std::list<AxisEvent*>> axis; //Mapping from Jobs to times
 
 public:
-	void addJob(Job* job, long time);
-	void removeJob(Job* job, long time);
+	void addJob(AxisEvent* job, long time);
+	void removeJob(AxisEvent* job, long time);
 	bool executeJobs(long time);
 
 	long getNextTimeStep(long time);

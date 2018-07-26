@@ -13,7 +13,7 @@ void TaskMonitor::create(Task* t, long time) {
 		//If task is periodic, add new task creation event for next release
 		//Note: This task should not be removed from the TimeAxis, so we don't need to store this pointer
 		if (t->periodity == PERIODIC) {
-			Job * newTaskJob = new TaskCreateJob(t);
+			AxisEvent * newTaskJob = new TaskCreateEvent(t);
 			Simulator::getInstance().timeAxis.addJob(newTaskJob, time + t->period);
 		}
 	}
@@ -52,7 +52,7 @@ void TaskMonitor::run(Task* t, long time) {
 		state = State::RUNNING;
 
 		//Add TaskTerminateJob at end of execution 
-		nextJob = new TaskTerminateJob(t);
+		nextJob = new TaskTerminateEvent(t);
 		Simulator::getInstance().timeAxis.addJob(nextJob, executionEndTime);
 
 		std::cout << time << '\t' << t->getID() << "\tTask running\n";
@@ -67,6 +67,8 @@ void TaskMonitor::terminate(Task* t, long time) {
 	//Only terminate a task that is running (it's execution has finished)
 	if (state == RUNNING) {
 		state = State::TERMINATED;
+		//Reset the elapsed execution time
+		elapsedExecutionTime = 0;
 		std::cout << time << '\t' << t->getID() << "\tTask terminated\n";
 	}
 	else {

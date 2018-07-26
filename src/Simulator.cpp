@@ -6,7 +6,7 @@ void Simulator::setup() {
 	scheduler->initialize();
 	//Release first job of every task
 	for (Task* t : systemModel.taskList) {
-		Job * newJob = new TaskCreateJob(t);
+		AxisEvent * newJob = new TaskCreateEvent(t);
 		timeAxis.addJob(newJob, globalTime);
 	}
 }
@@ -34,11 +34,11 @@ void Simulator::run() {
 	}
 }
 
-void TimeAxis::addJob(Job* job, long time) {
+void TimeAxis::addJob(AxisEvent* job, long time) {
 	axis[time].push_front(job);
 }	
 
-void TimeAxis::removeJob(Job* job, long time) {
+void TimeAxis::removeJob(AxisEvent* job, long time) {
 	axis[time].remove(job);
 }
 
@@ -46,7 +46,7 @@ bool TimeAxis::executeJobs(long time) {
 	//Get list from axis[time], iterate through every job there and execute()
 	bool dispatchNecessary = false;
 	auto list = axis[time];
-	for (Job* job : list) {
+	for (AxisEvent* job : list) {
 		job->execute(time);
 		dispatchNecessary = dispatchNecessary || job->isDispatchNecessary(); 
 	}

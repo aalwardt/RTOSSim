@@ -2,26 +2,26 @@
 
 #include "SystemModel.h"
 
-//A Job is an event on the TimeAxis
-class Job {
+//An AxisEvent is an event on the TimeAxis
+class AxisEvent {
 protected:
 	Task* task;
 public:
-	Job(Task* t) : task(t) {}
+	AxisEvent(Task* t) : task(t) {}
 	virtual void execute(long time) = 0;
 	virtual bool isDispatchNecessary() = 0;
 };
 
-class TaskCreateJob : public Job {
+class TaskCreateEvent : public AxisEvent {
 public:
-	TaskCreateJob(Task* t) : Job(t) {}
+	TaskCreateEvent(Task* t) : AxisEvent(t) {}
 	void execute(long time);
 	bool isDispatchNecessary() { return true; }
 };
 
-class TaskTerminateJob : public Job {
+class TaskTerminateEvent : public AxisEvent {
 public:
-	TaskTerminateJob(Task* t) : Job(t) {}
+	TaskTerminateEvent(Task* t) : AxisEvent(t) {}
 	void execute(long time);
 	bool isDispatchNecessary() { return true; }
 };
