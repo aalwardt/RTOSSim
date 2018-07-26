@@ -34,7 +34,8 @@ struct Task {
 	//For now we will model this with just a single execution time
 
 	//Default constructor
-	Task() {}
+	Task() : ID(newID++) {}
+	int getID() { return ID; }
 
 	//Ensure that Task objects are not copied. All task instances should be stored in the system model
 	Task(const Task&) = delete;
@@ -42,7 +43,9 @@ struct Task {
 
 	//Comparison operation
 	//Tasks are ordered by their priority, with lower numbers being higher priority
-
+private:
+	static int newID; //Keep track of task ID numbers
+	const int ID; //Id number
 };
 
 struct Core {
