@@ -1,5 +1,5 @@
 #include "TaskManager.h"
-#include "Jobs.h"
+#include "AxisEvent.h"
 #include "Simulator.h"
 #include <iostream>
 
@@ -8,6 +8,8 @@ void TaskMonitor::create(Task* t, long time) {
 	if (state == NON_EXISTING) {
 		//Set the absolute deadline of the task
 		absoluteDeadline = time + t->deadline;
+		//Reset the elapsed execution time
+		elapsedExecutionTime = 0;
 		state = State::CREATED;
 		std::cout << time << '\t' << t->getID() << "\tTask created\n";
 		//If task is periodic, add new task creation event for next release
@@ -67,8 +69,6 @@ void TaskMonitor::terminate(Task* t, long time) {
 	//Only terminate a task that is running (it's execution has finished)
 	if (state == RUNNING) {
 		state = State::TERMINATED;
-		//Reset the elapsed execution time
-		elapsedExecutionTime = 0;
 		std::cout << time << '\t' << t->getID() << "\tTask terminated\n";
 	}
 	else {
