@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SystemModel.h"
+#include "Jobs.h"
 #include <iostream>
 #include <map>
 
@@ -44,8 +45,6 @@ public:
 //Singleton class used to map Tasks with their TaskMonitors
 class TaskManager {
 	std::map<Task*, TaskMonitor*> map;
-
-
 
 	TaskManager() {} //Constructor is private to ensure this is a singleton
 public:

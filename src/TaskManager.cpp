@@ -31,6 +31,7 @@ void TaskMonitor::makeReady(Task* t, long time) {
 
 		//Remove the job generated for the end of this execution block
 		Simulator::getInstance().timeAxis.removeJob(nextJob, executionEndTime);
+		std::cout << time << '\t' << t << "\tTask preempted\n";
 	case CREATED:
 		state = READY;
 		std::cout << time << '\t' << t << "\tTask ready\n";
