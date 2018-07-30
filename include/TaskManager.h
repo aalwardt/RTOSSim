@@ -28,6 +28,7 @@ public:
 	{}
 
 	State getState() { return state; }
+	long getAbsoluteDeadline() { return absoluteDeadline; }
 
 	void create(Task*, long time);
 	void makeReady(Task*, long time);
