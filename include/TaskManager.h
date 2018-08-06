@@ -6,6 +6,7 @@
 #include <map>
 
 //Class used to store info on current Task such as state and execution time. Generates events.
+//TODO: Deadline checking??????
 class TaskMonitor {
 	State state;
 	long absoluteDeadline;		//Exact time of this job's deadline

@@ -17,14 +17,14 @@ public:
 	void stateChangeRequest(Task* task, State state, long time);
 };
 
-//Define RMS and DMS specifically
-
 //Binary predicate to order tasks by their period
 struct periodCompare {
 	bool operator() (Task* i, Task* j) {
 		return (i->period > j->period);
 	}
 };
+//Rate monotonic scheduling uses periods to order tasks
+typedef MonotonicScheduler<periodCompare> RMScheduler;
 
 //Binary predicate to order tasks by their deadline
 struct deadlineCompare {
@@ -32,15 +32,12 @@ struct deadlineCompare {
 		return (i->deadline > j->deadline);
 	}
 };
-
-//Rate monotonic scheduling uses periods to order tasks
-typedef MonotonicScheduler<periodCompare> RMScheduler;
-//Deadline monotonic scheduling uses deadlines to order taks
+//Deadline monotonic scheduling uses deadlines to order tasks
 typedef MonotonicScheduler<deadlineCompare> DMScheduler;
 
 //---------------------------------------------
 //Monotonic Scheduler Implementation
-//Note, this must be in the header file to avoid compilation errors
+//Note, this must be in the header file to avoid compilation errors due to template
 //---------------------------------------------
 
 template <class compare>

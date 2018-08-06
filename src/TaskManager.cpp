@@ -21,7 +21,7 @@ void TaskMonitor::create(Task* t, long time) {
 	}
 	else {
 		//TODO: Throw exception?
-		std::cerr << time << '\t' << t->getID() << "\tILLEGAL STATE CHANGE TO CREATED\n";
+		std::cerr << time << '\t' << t->getID() << "\tILLEGAL STATE CHANGE TO CREATED. MISSED DEADLINE?\n";
 	}
 }
 
