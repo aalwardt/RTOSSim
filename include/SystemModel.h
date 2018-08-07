@@ -49,14 +49,19 @@ private:
 };
 
 struct Core {
-	//TODO: Future use
+	bool active;
+	Core() : active(true) {}
 };
 
 class SystemModel {
 public:
 	std::vector<Task*> taskList;
+	//For now, we will assume all cores are homogeneous
+	//And just model the number of cores
+	//std::vector<Core*> coreList;
+	int numCores;
 
 	//Default constructor
-	SystemModel() {}
+	SystemModel(int cores) : numCores(cores) {}
 };
 
